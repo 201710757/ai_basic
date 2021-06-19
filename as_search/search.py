@@ -126,29 +126,49 @@ def yhk_euclideanHeuristic(position, problem, info={}):
 
 def aStarSearch(problem):
     """Search the node that has the lowest combined cost and heuristic first."""
-    #"*** SANGMYUNG UNIV. YOUR CODE HERE ***"
-    # --- Initialization ---
-    # n0 <- source node
-    # OPEN <- OPEN U {n0}
-    # CLOSED <- empty
+      #"*** SANGMYUNG UNIV. YOUR CODE HERE ***"
+      # --- Initialization ---
+      # n0 <- source node
+      # OPEN <- OPEN U {n0}
+      # CLOSED <- empty
+      n0 = problem.getStartState()
+      _open = util.PriorityQueue()
+      _open.push((n0, [], 0), 0)
+      _closed = []
 
-    # --- Excusion ---
-    """
-    while (OPEN is not empty){
-      n <- OPEN
-      if ( n is the target node)
-        return SUCCESS
-      CLOSED <- n
-      M <- child nodes of n
-      +) if ( m is in CLOSED ) -> continue
-      +) f^ = g + h^
-      OPEN <- OPEN U M
-      sort OPEN according to f^
-    }
-    return FAIL
-    """
+      # --- Excusion ---
+      """
+      while (OPEN is not empty){
+        n <- OPEN
+        if ( n is the target node)
+          return SUCCESS
+        CLOSED <- n
+        M <- child nodes of n
+        +) if ( m is in CLOSED ) -> continue
+        +) f^ = g + h^
+        OPEN <- OPEN U M
+        sort OPEN according to f^
+      }
+      return FAIL
+      """
 
-    util.raiseNotDefined()
+      while(not _open.isEmpty()):
+          n, n_actions, n_g = _open.pop()
+          if(problem.isGoalState(n)):
+              return n_actions
+          _closed.append(n)
+
+          M = problem.getSuccessors(n)
+          for m, m_actions, m_g in M:
+              if m in _closed:
+                  continue
+              g = m_g + n_g
+              f = g + yhk_manhattanHeuristic(m, problem)
+              actions = n_actions + [m_actions]
+              _open.push((m, actions, g), f)
+
+      util.raiseNotDefined()
+
 
 
 # Abbreviations
